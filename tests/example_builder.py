@@ -3,11 +3,11 @@ from collections import OrderedDict
 from enum import IntEnum
 from functools import cache
 
-import spb.core.sparkplug_b_pb2 as sparkplug_b_pb2
+import sparkplub_b_packets.core.sparkplug_b_pb2 as sparkplug_b_pb2
 
-from spb.builder import EdgeDevice, EdgeNode
-from spb.core.sparkplug_b import MetricDataType, ParameterDataType
-from spb.packets import DBirthPacket, DDataPacket, Metric, MetricProperty, NBirthPacket, NDataPacket
+from sparkplub_b_packets.builder import EdgeDevice, EdgeNode
+from sparkplub_b_packets.core.sparkplug_b import MetricDataType, ParameterDataType
+from sparkplub_b_packets.packets import DBirthPacket, DDataPacket, Metric, MetricProperty, NBirthPacket, NDataPacket
 
 
 # message types:

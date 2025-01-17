@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from spb.packets import DBirthPacket, DDataPacket, DDeathPacket, NBirthPacket, NDataPacket, NDeathPacket
+from sparkplub_b_packets.packets import DBirthPacket, DDataPacket, DDeathPacket, NBirthPacket, NDataPacket, NDeathPacket
 
 
 class EdgeNode(ABC):

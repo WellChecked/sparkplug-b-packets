@@ -4,8 +4,8 @@ from typing import Dict, List, Union
 
 from pydantic import BaseModel
 
-import spb.core.sparkplug_b as sparkplug
-from spb.core.sparkplug_b import addMetric
+import sparkplub_b_packets.core.sparkplug_b as sparkplug
+from sparkplub_b_packets.core.sparkplug_b import addMetric
 
 
 class MetricProperty(BaseModel):

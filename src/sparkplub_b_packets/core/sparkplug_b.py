@@ -12,8 +12,8 @@
 # ********************************************************************************/
 import time
 
-import spb.core.sparkplug_b_pb2 as sparkplug_b_pb2
-from spb.core.array_packer import *
+import sparkplub_b_packets.core.sparkplug_b_pb2 as sparkplug_b_pb2
+from sparkplub_b_packets.core.array_packer import *
 
 seqNum = 0
 bdSeq = 0

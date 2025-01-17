@@ -1,0 +1,25 @@
+[build-system]
+requires = [
+    "setuptools>=61.0",
+    "protobuf==5.29.3",
+    "pydantic==2.10.5"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name="sparkplug-b-packets"
+version="0.1.2025"
+authors = [
+  { name="Hank Haines", email="hankhaines@wellchecked.com" },
+]
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = {file = "LICENSE.md"}
+
+[project.urls]
+Homepage = "https://github.com/WellChecked/sparkplug-b-packets"
+Issues = "https://github.com/WellChecked/sparkplug-b-packets/issues"
