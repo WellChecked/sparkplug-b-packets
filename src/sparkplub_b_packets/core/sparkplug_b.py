@@ -446,7 +446,7 @@ def getSeqNum():
 ######################################################################
 def getBdSeqNum():
     global bdSeq
-    bdSeq = 0  # TODO: Fix for Ascent - I don't think this is correct
+    # bdSeq = 0  # TODO: Fix for Ascent - I don't think this is correct
     retVal = bdSeq
     print("-- bdSeqNum: " + str(retVal))
     bdSeq += 1
