@@ -8,8 +8,7 @@ from pydantic import BaseModel
 import sparkplub_b_packets.core.sparkplug_b_pb2 as sparkplug_b_pb2
 import sparkplub_b_packets.core.sparkplug_b as sparkplug
 from sparkplub_b_packets.core.sparkplug_b import addMetric
-
-from helpers.logging_helpers import get_logger
+from sparkplub_b_packets.helpers.logging_helpers import get_logger
 log = get_logger(__name__)
 
 
