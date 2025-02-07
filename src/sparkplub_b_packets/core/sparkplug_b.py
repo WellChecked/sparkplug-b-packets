@@ -447,7 +447,7 @@ def getSeqNum():
 def getBdSeqNum():
     global bdSeq
     retVal = bdSeq
-    # print("bdSeqNum: " + str(retVal))
+    print("-- bdSeqNum: " + str(retVal))
     bdSeq += 1
     if bdSeq == 256:
         bdSeq = 0

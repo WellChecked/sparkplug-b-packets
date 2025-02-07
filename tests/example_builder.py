@@ -7,7 +7,7 @@ import sparkplub_b_packets.core.sparkplug_b_pb2 as sparkplug_b_pb2
 
 from sparkplub_b_packets.builder import EdgeDevice, EdgeNode
 from sparkplub_b_packets.core.sparkplug_b import MetricDataType, ParameterDataType
-from sparkplub_b_packets.packets import DBirthPacket, DDataPacket, Metric, MetricProperty, NBirthPacket, NDataPacket
+from sparkplub_b_packets.packets import DBirthPacket, DDataPacket, Metric, MetricProperty, NBirthPacket, NCmdPacket, NDataPacket
 
 
 # message types:
@@ -34,6 +34,18 @@ class AliasMap(IntEnum):
     OGI_Count = 9
     OGI_Uptime = 10
     OGI_Confidence = 11
+
+
+@cache
+def get_nvidia_rebirth():
+    metrics = OrderedDict()
+    metrics["Node Control/Rebirth"] = Metric(
+        alias="Node Control/Rebirth",
+        alias_map=AliasMap.Rebirth,
+        data_type=MetricDataType.Boolean,
+        value=True
+    )
+    return metrics
 
 
 @cache
@@ -119,6 +131,12 @@ class NvidiaNDataPacket(NDataPacket):
         super().__init__(group=group, node=node, metrics=get_nvidia_metrics())
 
 
+class NvidiaNCmdPacket(NCmdPacket):
+
+    def __init__(self, group: str, node: str):
+        super().__init__(group=group, node=node, metrics=get_nvidia_rebirth())
+
+
 class OGIDBirthPacket(DBirthPacket):
 
     def __init__(self, group: str, node: str, device_id: str = "OGI"):
@@ -185,6 +203,15 @@ if __name__ == '__main__':
     ndata_payload = ndata_packet.payload()
     print(f"Topic: {ndata_packet.topic}\nPayload Metrics:")
     print_metrics(ndata_payload)
+
+    ndata_payload = ndata_packet.payload()
+    print(f"Topic: {ndata_packet.topic}\nPayload Metrics:")
+    print_metrics(ndata_payload)
+
+    ncmd = NvidiaNCmdPacket(group='tenant.location', node='edge')
+    ncmd_payload = ncmd.payload()
+    print(f"Topic: {ncmd.topic}\nPayload Metrics:")
+    print_metrics(ncmd_payload)
 
     ndeath_packet = edge_computer.death_certificate()
     ndeath_payload = ndeath_packet.payload()

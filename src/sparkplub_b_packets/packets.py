@@ -1,11 +1,16 @@
+import time
 from abc import ABC, abstractmethod
 from collections import OrderedDict
 from typing import Dict, List, Union
 
 from pydantic import BaseModel
 
+import sparkplub_b_packets.core.sparkplug_b_pb2 as sparkplug_b_pb2
 import sparkplub_b_packets.core.sparkplug_b as sparkplug
 from sparkplub_b_packets.core.sparkplug_b import addMetric
+
+from helpers.logging_helpers import get_logger
+log = get_logger(__name__)
 
 
 class MetricProperty(BaseModel):
@@ -29,7 +34,7 @@ class SparkplugBPacket(ABC):
         self._node = node
 
     @staticmethod
-    def marshal_payload(payload, metrics: Dict[str, Metric] = None) -> str:
+    def marshal_payload(payload, metrics: Dict[str, Metric] = None) -> bytearray:
         for alias in list(metrics):
             metric = addMetric(
                 container=payload,
@@ -94,7 +99,9 @@ class NBirthPacket(SparkplugBPacket):
         return self._metrics
 
     def payload(self, metrics: Dict[str, Metric] = None) -> str:
+        log.debug(f"Birth pre bdSeq: {sparkplug.bdSeq}")
         payload = sparkplug.getNodeBirthPayload()
+        log.debug(f"Birth post bdSeq: {sparkplug.bdSeq}")
         return self.marshal_payload(payload, metrics if metrics else self.metrics)
 
 
@@ -117,6 +124,26 @@ class NDataPacket(SparkplugBPacket):
         return self.marshal_payload(payload, metrics if metrics else self.metrics)
 
 
+class NCmdPacket(SparkplugBPacket):
+
+    def __init__(self, group: str, node: str, metrics: Dict[str, Metric] = None):
+        super().__init__(group, node)
+        self._metrics = metrics if metrics else {}
+
+    @property
+    def topic(self) -> str:
+        return f"spBv1.0/{self._group}/NCMD/{self._node}"
+
+    @property
+    def metrics(self):
+        return self._metrics
+
+    def payload(self, metrics: Dict[str, Metric] = None) -> str:
+        payload = sparkplug_b_pb2.Payload()
+        payload.timestamp = int(round(time.time() * 1000))
+        return self.marshal_payload(payload, metrics if metrics else self.metrics)
+
+
 class NDeathPacket(NBirthPacket):
 
     @property
@@ -124,7 +151,9 @@ class NDeathPacket(NBirthPacket):
         return f"spBv1.0/{self._group}/NDEATH/{self._node}"
 
     def payload(self, metrics: Dict[str, Metric] = None) -> bytearray:
+        log.debug(f"Death pre bdSeq: {sparkplug.bdSeq}")
         deathPayload = sparkplug.getNodeDeathPayload()
+        log.debug(f"Death pre bdSeq: {sparkplug.bdSeq}")
         return bytearray(deathPayload.SerializeToString())
 
 
@@ -156,6 +185,26 @@ class DDataPacket(DBirthPacket):
 
     def payload(self, metrics: Dict[str, Metric] = None) -> str:
         payload = sparkplug.getDeviceBirthPayload()
+        return self.marshal_payload(payload, metrics if metrics else self.metrics)
+
+
+class DCmdPacket(SparkplugBPacket):
+
+    def __init__(self, group: str, node: str, metrics: Dict[str, Metric] = None):
+        super().__init__(group, node)
+        self._metrics = metrics if metrics else {}
+
+    @property
+    def topic(self) -> str:
+        return f"spBv1.0/{self._group}/DCMD/{self._node}"
+
+    @property
+    def metrics(self):
+        return self._metrics
+
+    def payload(self, metrics: Dict[str, Metric] = None) -> str:
+        payload = sparkplug_b_pb2.Payload()
+        payload.timestamp = int(round(time.time() * 1000))
         return self.marshal_payload(payload, metrics if metrics else self.metrics)
 
 
