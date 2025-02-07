@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name="sparkplug_b_packets"
-version="0.4.2025"
+version="0.5.2025"
 authors = [
   { name="Hank Haines", email="hankhaines@wellchecked.com" },
 ]
