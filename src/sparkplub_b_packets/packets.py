@@ -60,7 +60,7 @@ class SparkplugBPacket(ABC):
 
     @property
     def group(self):
-        return self._group
+        return self._group.lower().replace(".", "X")
 
     @property
     def node(self):
@@ -91,7 +91,7 @@ class NBirthPacket(SparkplugBPacket):
 
     @property
     def topic(self) -> str:
-        return f"spBv1.0/{self._group}/NBIRTH/{self._node}"
+        return f"spBv1.0/{self.group}/NBIRTH/{self._node}"
 
     @property
     def metrics(self):
@@ -112,7 +112,7 @@ class NDataPacket(SparkplugBPacket):
 
     @property
     def topic(self) -> str:
-        return f"spBv1.0/{self._group}/NDATA/{self._node}"
+        return f"spBv1.0/{self.group}/NDATA/{self._node}"
 
     @property
     def metrics(self):
@@ -131,7 +131,7 @@ class NCmdPacket(SparkplugBPacket):
 
     @property
     def topic(self) -> str:
-        return f"spBv1.0/{self._group}/NCMD/{self._node}"
+        return f"spBv1.0/{self.group}/NCMD/{self._node}"
 
     @property
     def metrics(self):
@@ -147,7 +147,7 @@ class NDeathPacket(NBirthPacket):
 
     @property
     def topic(self) -> str:
-        return f"spBv1.0/{self._group}/NDEATH/{self._node}"
+        return f"spBv1.0/{self.group}/NDEATH/{self._node}"
 
     def payload(self, metrics: Dict[str, Metric] = None) -> bytearray:
         log.debug(f"Death pre bdSeq: {sparkplug.bdSeq}")
@@ -165,7 +165,7 @@ class DBirthPacket(SparkplugBPacket):
 
     @property
     def topic(self) -> str:
-        return f"spBv1.0/{self._group}/DBIRTH/{self._node}/{self._device_id}"
+        return f"spBv1.0/{self.group}/DBIRTH/{self._node}/{self._device_id}"
 
     @property
     def metrics(self):
@@ -180,7 +180,7 @@ class DDataPacket(DBirthPacket):
 
     @property
     def topic(self) -> str:
-        return f"spBv1.0/{self._group}/DDATA/{self._node}/{self._device_id}"
+        return f"spBv1.0/{self.group}/DDATA/{self._node}/{self._device_id}"
 
     def payload(self, metrics: Dict[str, Metric] = None) -> str:
         payload = sparkplug.getDeviceBirthPayload()
@@ -195,7 +195,7 @@ class DCmdPacket(SparkplugBPacket):
 
     @property
     def topic(self) -> str:
-        return f"spBv1.0/{self._group}/DCMD/{self._node}"
+        return f"spBv1.0/{self.group}/DCMD/{self._node}"
 
     @property
     def metrics(self):
@@ -211,7 +211,7 @@ class DDeathPacket(DBirthPacket):
 
     @property
     def topic(self) -> str:
-        return f"spBv1.0/{self._group}/DDEATH/{self._node}/{self._device_id}"
+        return f"spBv1.0/{self.group}/DDEATH/{self._node}/{self._device_id}"
 
     def payload(self, metrics: Dict[str, Metric] = None) -> str:
         payload = sparkplug.getDeviceBirthPayload()

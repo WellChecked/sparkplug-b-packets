@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from sparkplub_b_packets.packets import DBirthPacket, DDataPacket, DDeathPacket, NBirthPacket, NDataPacket, NDeathPacket
+from sparkplub_b_packets.packets import DBirthPacket, DCmdPacket, DDataPacket, DDeathPacket, NBirthPacket, NCmdPacket, NDataPacket, NDeathPacket
 
 
 class EdgeNode(ABC):
@@ -16,6 +16,10 @@ class EdgeNode(ABC):
     @property
     def node(self):
         return self._node
+
+    def node_command(self) -> NCmdPacket:
+        packet = NCmdPacket(group=self._group, node=self._node)
+        return packet
 
     @abstractmethod
     def birth_certificate(self) -> NBirthPacket:
@@ -48,6 +52,10 @@ class EdgeDevice(ABC):
     @property
     def device(self):
         return self._device_id
+
+    def device_command(self) -> DCmdPacket:
+        packet = DCmdPacket(group=self._group, node=self._node)
+        return packet
 
     @abstractmethod
     def birth_certificate(self) -> DBirthPacket:
