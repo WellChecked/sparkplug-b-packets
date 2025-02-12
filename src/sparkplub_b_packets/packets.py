@@ -145,6 +145,9 @@ class NCmdPacket(SparkplugBPacket):
 
 class NDeathPacket(NBirthPacket):
 
+    def __init__(self, group: str, node: str):
+        super().__init__(group=group, node=node, metrics={})
+
     @property
     def topic(self) -> str:
         return f"spBv1.0/{self.group}/NDEATH/{self._node}"
@@ -208,6 +211,9 @@ class DCmdPacket(SparkplugBPacket):
 
 
 class DDeathPacket(DBirthPacket):
+
+    def __init__(self, group: str, node: str, device_id: str):
+        super().__init__(group=group, node=node, device_id=device_id, metrics={})
 
     @property
     def topic(self) -> str:
