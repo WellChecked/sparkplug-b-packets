@@ -33,7 +33,7 @@ class SparkplugBPacket(ABC):
         self._node = node
 
     @staticmethod
-    def marshal_payload(payload, metrics: Dict[str, Metric] = None) -> bytearray:
+    def marshal_payload(payload, metrics: Dict[str, Metric] = None) -> str:
         for alias in list(metrics):
             metric = addMetric(
                 container=payload,
@@ -85,9 +85,9 @@ class SparkplugBPacket(ABC):
 
 class NBirthPacket(SparkplugBPacket):
 
-    def __init__(self, group: str, node: str, metrics: Dict[str, Metric] = None):
+    def __init__(self, group: str, node: str, metrics: Dict[str, Metric]):
         super().__init__(group, node)
-        self._metrics = metrics if metrics else {}
+        self._metrics = metrics
 
     @property
     def topic(self) -> str:
@@ -149,19 +149,19 @@ class NDeathPacket(NBirthPacket):
     def topic(self) -> str:
         return f"spBv1.0/{self.group}/NDEATH/{self._node}"
 
-    def payload(self, metrics: Dict[str, Metric] = None) -> bytearray:
+    def payload(self, metrics: Dict[str, Metric] = None) -> str:
         log.debug(f"Death pre bdSeq: {sparkplug.bdSeq}")
         deathPayload = sparkplug.getNodeDeathPayload()
         log.debug(f"Death pre bdSeq: {sparkplug.bdSeq}")
-        return bytearray(deathPayload.SerializeToString())
+        return deathPayload.SerializeToString()
 
 
 class DBirthPacket(SparkplugBPacket):
 
-    def __init__(self, group: str, node: str, device_id: str = "OGI", metrics: Dict[str, Metric] = None):
+    def __init__(self, group: str, node: str, device_id: str, metrics: Dict[str, Metric]):
         super().__init__(group, node)
         self._device_id = device_id
-        self._metrics = metrics if metrics else {}
+        self._metrics = metrics
 
     @property
     def topic(self) -> str:
