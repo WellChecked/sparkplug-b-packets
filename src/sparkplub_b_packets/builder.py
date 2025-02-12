@@ -23,7 +23,7 @@ class EdgeNode(ABC):
 
     @abstractmethod
     def birth_certificate(self) -> NBirthPacket:
-        pass
+        raise NotImplementedError()
 
     def death_certificate(self) -> NDeathPacket:
         packet = NDeathPacket(group=self._group, node=self._node)
@@ -31,7 +31,7 @@ class EdgeNode(ABC):
 
     @abstractmethod
     def data_packet(self, **kwargs) -> NDataPacket:
-        pass
+        raise NotImplementedError()
 
 
 class EdgeDevice(ABC):
@@ -59,7 +59,7 @@ class EdgeDevice(ABC):
 
     @abstractmethod
     def birth_certificate(self) -> DBirthPacket:
-        pass
+        raise NotImplementedError()
 
     def death_certificate(self) -> DDeathPacket:
         packet = DDeathPacket(group=self.group, node=self.node, device_id=self.device)
@@ -67,4 +67,4 @@ class EdgeDevice(ABC):
 
     @abstractmethod
     def data_packet(self, **kwargs) -> DDataPacket:
-        pass
+        raise NotImplementedError()
